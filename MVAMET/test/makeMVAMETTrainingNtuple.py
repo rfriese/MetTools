@@ -5,11 +5,12 @@ from PhysicsTools.PatAlgos.tools.tauTools import *
 from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
 
 options = VarParsing ('python')
-options.register ('globalTag',"80X_mcRun2_asymptotic_v5",VarParsing.multiplicity.singleton,VarParsing.varType.string,'input global tag to be used');
-options.register ('inputFile', 'root://xrootd.unl.edu//store/mc/RunIIFall15MiniAODv2/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PU25nsData2015v1_76X_mcRun2_asymptotic_v12-v1/70000/0232D37A-77BA-E511-B3C5-0CC47A4C8EA8.root', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a testfile")
+options.register ('globalTag',"80X_mcRun2_asymptotic_2016_miniAODv2_v1",VarParsing.multiplicity.singleton,VarParsing.varType.string,'input global tag to be used');
+options.register ('inputFile', 'file://////storage/jbod/nzaeh/00E9D1DA-105D-E611-A56E-FA163EE988CA.root', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a testfile")
 options.register ("localSqlite", '', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a local sqlite file")
 options.register ("reapplyJEC", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply JEC to Jets")
 options.register ("reapplyPUJetID", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply PU Jet ID")
+options.register ("recomputeMET", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Recomute MET instead of taking it from MiniAOD")
 options.register ("isData", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Input is data")
 options.parseArguments()
 
@@ -35,6 +36,21 @@ if options.reapplyJEC:
     recorrectJets(process, options.isData)
     jetCollection = "patJetsReapplyJEC"
 
+if options.recomputeMET:
+	from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD
+	runMetCorAndUncFromMiniAOD(process, isData=options.isData, jetCollUnskimmed=jetCollection  )
+
+	from PhysicsTools.PatAlgos.slimming.puppiForMET_cff import makePuppiesFromMiniAOD
+	makePuppiesFromMiniAOD( process );
+	runMetCorAndUncFromMiniAOD(process,
+                             isData=options.isData,
+                             metType="Puppi",
+                             pfCandColl=cms.InputTag("puppiForMET"),
+                             recoMetFromPFCs=True,
+                             reclusterJets=True,
+                             jetFlavor="AK4PFPuppi",
+                             postfix="Puppi")
+
 if options.reapplyPUJetID:
     getattr(process, jetCollection).userData.userFloats.src += ['pileupJetIdUpdated:fullDiscriminant']
 
@@ -55,6 +71,8 @@ process.options.allowUnscheduled = cms.untracked.bool(True)
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(options.maxEvents)
 ) 
+
+
 
 if not hasattr(process, "p"):
     process.p = cms.Path()
