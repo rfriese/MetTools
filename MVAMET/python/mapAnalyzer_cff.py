@@ -5,19 +5,16 @@ for met in ["slimmedMETs", "patpfTrackMET", "patpfNoPUMET", "patpfPUCorrectedMET
   for postfix in postfixes:
     metstrings.append("recoil" + met + "_" + postfix)
 
+jetAttributes = ["Eta", "M", "Phi", "Pt"]
+for jetID in range(0,5):
+  for attribute in jetAttributes:
+    metstrings.append(("Jet%i"%jetID) + "_" + attribute)
+
 metstrings.extend([ "dmvamet_Pt", "dmvamet_Phi", "dpfmet_Pt", "dpfmet_Phi", "MVAMET_Pt", "MVAMET_sumEt", "MVAMET_Phi", "PhiTrainingResponse", "RecoilTrainingResponse",
                  "genMet_Pt",
                  "genMet_Phi",
                  "weight",
                  "select",
-                 "Jet0_Eta",
-                 "Jet0_M",
-                 "Jet0_Phi",
-                 "Jet0_Pt",
-                 "Jet1_Eta",
-                 "Jet1_M",
-                 "Jet1_Phi",
-                 "Jet1_Pt",
                  "NCleanedJets",
                  "NVertex",
                  "Boson_Pt",

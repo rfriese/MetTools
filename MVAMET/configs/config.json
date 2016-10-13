@@ -9,8 +9,8 @@
 			"desc" : "Weight to get flat pT distribution",
 			"name" : "flatPtWeight",
 			"flattenVariable" : "Boson_Pt",
-			"weight" : "select&&nCombinations==1",
-			"eventsPerBin" : 300,
+			"weight" : "select&&nCombinations==1&&Boson_Pt<1000",
+			"eventsPerBin" : 500,
 			"type" : 1
 		},
 		"phiTraining":

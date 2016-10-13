@@ -2,6 +2,7 @@
 #include "TLorentzVector.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TBranch.h"
 #include "TTreeFormula.h"
 #include <iostream>
 //#include "Cintex/Cintex.h"
@@ -19,22 +20,40 @@ int main(int argc, char* argv[] ) {
   std::cout << "Shrinking file " << argv[1]<< " with cut '" << argv[2] << "'" << std::endl;
   TFile *lInput = TFile::Open((argv[1]));
   TTree *lTree = (TTree*) lInput->Get(argv[3]);
+   
+
+
   TString expression = argv[2]; //"(nLeptons==2)*(lepton1_charge!=0)*(lepton1_charge==-lepton2_charge)*(z_m>60)*(z_m<120)";
   TTreeFormula *Cut = new TTreeFormula("name", expression, lTree);
 
   TFile *lOFile = new TFile("slimmed.root", "RECREATE");
   TDirectory *cdMAPAnalyzer = lOFile->mkdir("MAPAnalyzer");
   cdMAPAnalyzer->cd();
+  float fileName; 
   TTree *lOTree = lTree->CloneTree(0);
+  TBranch *BranchFileName =lOTree->Branch("fileName",&fileName,"fileName/C");
+  fileName = strtof(argv[4], NULL);
   int lNEvents = lTree->GetEntries();
   for (Long64_t i0=0; i0<lNEvents;i0++)
   {
     if(i0%1000000==0)
         std::cout << "Event " << i0 << "/" << lNEvents << std::endl;
     lTree->GetEntry(i0);
-    float result = (float)Cut->EvalInstance();
-    if(result > 0)
+    if (strcmp( argv[2], "") == 0)
+    {
+      float result = (float)Cut->EvalInstance();
+      if(result > 0)
+      {
+        lOTree->Fill();
+        BranchFileName->Fill();
+      }
+    }
+    else
+    { 
       lOTree->Fill();
+      BranchFileName->Fill();
+    }
+ 
   }
   lOTree->SetName(lTree->GetName());
   lOTree->Write();
