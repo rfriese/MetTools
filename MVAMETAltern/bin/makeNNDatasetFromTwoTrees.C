@@ -24,6 +24,7 @@ DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 --> 4
 DYJetsToLL_M-50_HT-600toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8 --> 5
 */
 
+
 bool isUsefulFile(float fileNr)
 {
     bool isUseful = false;
@@ -43,59 +44,79 @@ int main(int argc, char* argv[] )
 	
 	std::string filename1 = argv[1];
 	TFile *inputFile1 = TFile::Open(filename1.c_str());
-	TTree *inputTree1 = (TTree*)(inputFile1->Get("MAPAnalyzer/t"));
+	TTree *inputTree1 = (TTree*)(inputFile1->Get("t"));
 	
-	std::string filenameFriend = argv[2];
+	std::string filenameLong = argv[2];
+	TFile *inputFileLong = TFile::Open(filenameLong.c_str());
+	TTree *inputTreeLong = (TTree*)(inputFileLong->Get("t"));
 	
-	std::string filenameFriendPhi = filenameFriend + "PhiCorrectedRecoil.root";
-	TFile *inputFileFriendPhi = TFile::Open(filenameFriendPhi.c_str());
-	TTree *inputTreeFriendPhi = (TTree*)(inputFileFriendPhi->Get("PhiCorrectedRecoil"));
-
-	std::string filenameFriendRecoil = filenameFriend + "LongZCorrectedRecoil.root";
-	TFile *inputFileFriendLongZ = TFile::Open(filenameFriendRecoil.c_str());
-	TTree *inputTreeFriendLongZ = (TTree*)(inputFileFriendLongZ->Get("LongZCorrectedRecoil"));
-	
-
 	
 	cout << "Entries: " << inputTree1->GetEntries() << endl;
-	cout << "Entries friend Phi: " << inputTreeFriendPhi->GetEntries() << endl;
-	cout << "Entries friend LongZ: " << inputTreeFriendLongZ->GetEntries() << endl;
-	
-	if (inputTree1->GetEntries() != inputTreeFriendPhi->GetEntries() || inputTreeFriendPhi->GetEntries() != inputTreeFriendLongZ->GetEntries())
+	cout << "Entries Long: " << inputTreeLong->GetEntries() << endl;
+
+	if (inputTree1->GetEntries() != inputTreeLong->GetEntries())
 	{
-	    cout << "Different amount of entries in tree and its friends, wrong input data? (quit)";
+	    cout << "Different amount of entries in tree and Tree with LongZ variables, wrong input data? (quit)";
 	    return 1;
 	}
 	
+	
 	TObjArray *entryarray = new TObjArray(*inputTree1->GetListOfBranches());
-
-	TObjArray *entryarrayPhi = new TObjArray(*inputTreeFriendPhi->GetListOfBranches());
-
-	TObjArray *entryarrayLongZ = new TObjArray(*inputTreeFriendLongZ->GetListOfBranches());
+	
+	TObjArray *entryarrayLongFull = new TObjArray(*inputTreeLong->GetListOfBranches());
+	
+	TObjArray *entryarrayLong = new TObjArray();
 
 	cout << "Number of objects = " << entryarray->GetEntries() << endl; 
-	cout << "Number of objects friend Phi = " << entryarrayPhi->GetEntries() << endl; 
-	cout << "Number of objects friend LongZ= " << entryarrayLongZ->GetEntries() << endl; 
-	//cout << "Anzahl Objekte = " << inputTree1->GetListOfBranches()->GetEntries() << endl; 
-
+	cout << "Number of objects in LongZ Tree Full = " << entryarrayLongFull->GetEntries() << endl; 
+	
+	for (int i = 0; i < entryarrayLongFull->GetEntries(); i++)
+	    if (entryarray->FindObject(entryarrayLongFull->At(i)->GetName()) == 0)
+		entryarrayLong->Add(entryarrayLongFull->At(i));
+	    
+	//for (int i = 0; i < entryarrayLong->GetEntries(); i++)
+	  //cout << entryarrayLong->At(i)->GetName() << endl;
+	    
+	cout << "Number of objects in LongZ Tree  = " << entryarrayLong->GetEntries() << endl; 
+	
+	
 	fstream dataset;
-	dataset.open("dataMVAMet.csv", ios::out);
+	dataset.open("dataMVAMetSmall.csv", ios::out);
+	
+	cout << "Counting selected events..." << endl;
+	float selectChecker;
+	int selectedEvents = 0;
+	float fileChecker;
+	inputTree1->SetBranchAddress("select",&selectChecker);
+	inputTree1->SetBranchAddress("fileName",&fileChecker);
+	for (int i = 0; i < inputTree1->GetEntries(); i++)
+	{
+	    inputTree1 -> GetEntry(i);
+	    if (selectChecker == 1 && isUsefulFile(fileChecker))
+		selectedEvents++;
+	    if (i % 1000000 == 0)
+		cout << i <<  "/" << inputTree1->GetEntries() << " Events processed" << endl;
+	}
 	
 	
-
 	int maxEntries = 0;
-	bool limitEvents = false;
+	bool limitEvents = true;
 	if (limitEvents)
-	  if (inputTree1->GetEntries() > 1000000)
-	      maxEntries = 1000000;
+	  if (selectedEvents > 500000)
+	      maxEntries = 500000;
 	  else 
-	      maxEntries = inputTree1->GetEntries();
+	      maxEntries = selectedEvents;
 	else
-	  maxEntries = inputTree1->GetEntries();
+	  maxEntries = selectedEvents;
 
-	int variablesize = entryarray->GetEntries()+3+entryarrayPhi->GetEntries()+entryarrayLongZ->GetEntries();
+	cout << "SelectedEvents: " << selectedEvents << endl;
 	
-	vector<float> datacontainer(maxEntries*(variablesize));
+	int variablesize = entryarray->GetEntries()+entryarrayLong->GetEntries()+3;
+	
+	cout << "maxEntries: " << maxEntries << endl;
+	cout << "variablesize: " << variablesize << endl;
+	//vector<float> *datacontainer = (maxEntries*(variablesize));
+	float *datacontainer = new float[maxEntries*(variablesize)];
 	
 	cout << "Loading data into local storage.." << endl;
 	int selectentry = 0;
@@ -108,27 +129,22 @@ int main(int argc, char* argv[] )
 		    selectentry = j;
 	    }
 	    
-	for (int j = 0; j < entryarrayPhi->GetEntries(); j++)
+	for (int j = 0; j < entryarrayLong->GetEntries(); j++)
 	    {
-		inputTreeFriendPhi->SetBranchAddress(entryarrayPhi->At(j)->GetName(),&varlist[j+entryarray->GetEntries()]);
+		inputTreeLong->SetBranchAddress(entryarrayLong->At(j)->GetName(),&varlist[j+entryarray->GetEntries()]);
 	    }
-	    
-	for (int j = 0; j < entryarrayLongZ->GetEntries(); j++)
-	    {
-		inputTreeFriendLongZ->SetBranchAddress(entryarrayLongZ->At(j)->GetName(),&varlist[j+entryarray->GetEntries()+entryarrayPhi->GetEntries()]);
-	    }
-	    
 	
 	int count = 0;
 	int treecount = 0;
+
+	inputTree1->SetBranchAddress("fileName",&fileChecker);
 	//for (int i = 0; i < maxEntries; i++)
 	while (count < maxEntries && treecount < inputTree1->GetEntries())
 	{
 	    inputTree1 -> GetEntry(treecount);
-	    inputTreeFriendLongZ -> GetEntry(treecount);
-	    inputTreeFriendPhi -> GetEntry(treecount);
-	    
-	    if (varlist[selectentry] == 1)
+	    inputTreeLong -> GetEntry(treecount);
+
+	    if (varlist[selectentry] == 1 && isUsefulFile(fileChecker))
 	    {
 		for (int j = 0; j < variablesize-3; j++)
 		{
@@ -140,6 +156,8 @@ int main(int argc, char* argv[] )
 		count++;
 	    }
 	    treecount++;
+	    if (treecount % 1000000 == 0)
+		cout << treecount << "/" << inputTree1->GetEntries() << " Events processed" << endl;
 	}	
 	maxEntries = count;
 	cout << "CSV Entries: " << count << endl;
@@ -172,37 +190,29 @@ int main(int argc, char* argv[] )
 	    if (strcmp(entryarray->At(i)->GetName(),"recoilslimmedMETs_Phi") == 0)
 		recoilslimmedMETs_Phi = i;
 	    if (strcmp(entryarray->At(i)->GetName(),"recoilslimmedMETs_Pt") == 0)
-		recoilslimmedMETs_Phi = i;
+		recoilslimmedMETs_Pt = i;
 	    if (strcmp(entryarray->At(i)->GetName(),"Boson_Phi") == 0)
 		boson_Phi = i;
 	    if (strcmp(entryarray->At(i)->GetName(),"Boson_Pt") == 0)
 		boson_Pt = i;
+	    if (strcmp(entryarray->At(i)->GetName(),"PhiCorrectedRecoil_LongZ") == 0)
+		PhiCorrectedRecoil_LongZ = i;
 	    if (variance[i] != 0)
 		dataset <<  entryarray->At(i)->GetName() << ",";
 	}
 	
-	
-	
-	
-	for (int i = 0; i < entryarrayPhi->GetEntries(); i++)
+	for (int i = 0; i < entryarrayLong->GetEntries(); i++)
 	{
-	    if (strcmp(entryarrayPhi->At(i)->GetName(),"PhiCorrectedRecoil_LongZ") == 0)
-		PhiCorrectedRecoil_LongZ = i;
 	    if (variance[i + entryarray->GetEntries()] != 0)
-		dataset <<  entryarrayPhi->At(i)->GetName() << ",";
+		dataset <<  entryarrayLong->At(i)->GetName() << ",";
 	}
 	
+		
 	cout << "boson_Phi " << boson_Phi<<endl;
 	cout << "boson_Pt " << boson_Pt<<endl;
 	cout << "recoilslimmedMETs_Phi " << recoilslimmedMETs_Phi<<endl;
 	cout << "recoilslimmedMETs_Pt " << recoilslimmedMETs_Pt<<endl;
 	cout << "PhiCorrectedRecoil_LongZ " << PhiCorrectedRecoil_LongZ<<endl;
-	
-	for (int i = 0; i < entryarrayLongZ->GetEntries(); i++)
-	{
-	    if (variance[i + entryarray->GetEntries()+entryarrayPhi->GetEntries()] != 0)
-		dataset <<  entryarrayLongZ->At(i)->GetName() << ",";
-	}
 	
 	//add target variables
 	dataset << "targetPhiFromSlimmed,targetRecoilFromBDT,targetRecoilFromSlimmed";
@@ -214,14 +224,11 @@ int main(int argc, char* argv[] )
 	    for (int j = 0; j < entryarray->GetEntries(); j++)
 		if (variance[j] != 0)
 		    dataset << datacontainer[i*(variablesize)+j] << ",";
-	    
-	    for (int j = 0; j < entryarrayPhi->GetEntries(); j++)
+		
+	    for (int j = 0; j < entryarrayLong->GetEntries(); j++)
 		if (variance[j+entryarray->GetEntries()] != 0)
 		    dataset << datacontainer[i*(variablesize)+j+entryarray->GetEntries()] << ",";
-		
-	    for (int j = 0; j < entryarrayLongZ->GetEntries(); j++)
-		if (variance[j+entryarray->GetEntries()+entryarrayPhi->GetEntries()] != 0)
-		    dataset << datacontainer[i*(variablesize)+j+entryarray->GetEntries()+entryarrayPhi->GetEntries()] << ",";
+	    
 	    //extra first target variable
 	    //"(Boson_Phi-recoilslimmedMETs_Phi+TMath::Pi()) - 2.*TMath::Pi()*((Boson_Phi-recoilslimmedMETs_Phi) > 0)",
 	    if (datacontainer[i*(variablesize)+boson_Phi]-datacontainer[i*(variablesize)+recoilslimmedMETs_Phi] > 0)
@@ -229,14 +236,12 @@ int main(int argc, char* argv[] )
 	    else
 		dataset << datacontainer[i*(variablesize)+boson_Phi]-datacontainer[i*(variablesize)+recoilslimmedMETs_Phi]+PI_F;
 	    
-	    
-	    
-	    
+
 	    dataset << ",";
 	    //extra second target variable depending on the BDT prediction
 	    //"-Boson_Pt/PhiCorrectedRecoil_LongZ",
-	    dataset << (-datacontainer[i*(variablesize)+boson_Pt]/datacontainer[i*(variablesize)+entryarray->GetEntries()+PhiCorrectedRecoil_LongZ]);
-	    
+	    dataset << (-datacontainer[i*(variablesize)+boson_Pt]/datacontainer[i*(variablesize)+PhiCorrectedRecoil_LongZ]);
+	    dataset << ",";
 	    //extra third target Pt variable independent of the BDT prediction
 	    //"-Boson_Pt/PhiCorrectedRecoil_LongZ",
 	    dataset << (-datacontainer[i*(variablesize)+boson_Pt]/datacontainer[i*(variablesize)+recoilslimmedMETs_Pt]);
@@ -247,8 +252,8 @@ int main(int argc, char* argv[] )
 		dataset << endl;
 	    }
 	    
-	    if (i % 10000 == 0)
-		cout << i << " Events processed" << endl;
+	    if (i % 100000 == 0)
+		cout << i <<  "/" << maxEntries << " Events processed" << endl;
 	}
 	
 	

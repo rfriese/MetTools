@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "TSystem.h"
 
 #include "../interface/applyphi.h"
 
@@ -21,26 +22,6 @@ int main(int argc, char* argv[] ) {
 
   std::string config = argv[1];
   std::cout << argv[1] << std::endl;
-  if(strstr(argv[1], "manual") )
-  {
-    //mauell
-    std::string filename1 = argv[2];
-    TFile *inputFile1 = TFile::Open(filename1.c_str());
-    TTree *inputTree1 = (TTree*)(inputFile1->Get("MAPAnalyzer/t"));
-    
-    applyTraining *phi = new applyTraining("PhiCorrectedRecoil", "recoilPFMet", "PhiCorection_PUPPI.root", 1, inputTree1, filename1);
-    phi->getResults();
-    delete phi;
-
-    std::string filename2 = filename1 + "_PhiCorrectedRecoil.root";
-    TFile *inputFile2 = TFile::Open(filename2.c_str());
-    TTree *inputTree2 = (TTree*)(inputFile2->Get("t"));
-    std::cout << filename2 << std::endl;
-    applyTraining *recoil = new applyTraining("LongZCorrectedRecoil", "PhiCorrectedRecoil", "RecoilCorrection_PUPPI.root", 2, inputTree2, filename2);
-    recoil->getResults();
-    delete recoil;
-    return 0;
-  }
 
 
 	// config file einlesen
@@ -73,43 +54,68 @@ int main(int argc, char* argv[] ) {
 
   std::cout << "input tree: " << inputTree << std::endl;
   std::cout << "This many: " << trainingProperties.size() << std::endl;
-  std::string lastName;
+  std::string outputfile = pt.get<std::string>("outputdir") + "data.root";
+  std::string outputdir = pt.get<std::string>("outputdir");  
+  std::string lastfile;
+
   for(size_t iTrain = 0; iTrain < trainingProperties.size(); ++iTrain)
   {
-    //applyTraining *user = new applyTraining(trainingProperties[iTrain], inputTree);
-    BOOST_FOREACH(boost::property_tree::ptree::value_type &v, trainingProperties[iTrain].get_child("friends"))
-    {
-      assert(v.first.empty());
-      std::string friendName = v.second.data();
-      inputTree->AddFriend("t", (friendName + ".root").c_str());
-    }
-    if(trainingProperties[iTrain].get<int>("mode") == 0)
-    {
+    cout << "JUMPING INTO FOR LOOP TREE" << endl;
+    
     if(iTrain>0)
     {
-      inputFile = TFile::Open((lastName+".root").c_str());
+      inputFile = TFile::Open(outputfile.c_str());
       inputTree = (TTree*)(inputFile->Get("t"));
+      lastfile = outputfile;
+      outputfile = outputdir + "data" + std::to_string(iTrain) + ".root";
+      TObjArray *entryarray = new TObjArray(*inputTree->GetListOfBranches());
+      std::cout << "Objects: " << entryarray->GetEntries() << std::endl;
+      std::cout << outputfile << std::endl;
     }
-    lastName =  trainingProperties[iTrain].get<std::string>("name");
-    applyTraining *user = new applyTraining(trainingProperties[iTrain].get<std::string>("name"), 
-                                            trainingProperties[iTrain].get<std::string>("apply_MVA_to"),
-                                            weightfilename,
-       //                                     trainingProperties[iTrain].get<int>("mode"),
-                                            inputTree,
-                                            inputFilename);
-    user->getResults();
-    delete user;
-    }else 
+    
+    
+    if(trainingProperties[iTrain].get<int>("mode") != -1)
     {
-    applyTraining *user = new applyTraining(trainingProperties[iTrain].get<std::string>("name"), 
-                                            trainingProperties[iTrain].get<std::string>("apply_MVA_to"),
-                                            weightfilename,
-                                            trainingProperties[iTrain].get<int>("mode"),
-                                            inputTree,
-                                            inputFilename);
-    user->getResults();
-    delete user;
+	//applyTraining *user = new applyTraining(trainingProperties[iTrain], inputTree);
+	/*
+	BOOST_FOREACH(boost::property_tree::ptree::value_type &v, trainingProperties[iTrain].get_child("friends"))
+	{
+	  assert(v.first.empty());
+	  std::string friendName = v.second.data();
+	  inputTree->AddFriend("t", (outputfile).c_str());
+	}
+	*/
+	cout << "JUMPING INTO THE MODE 0 TREE" << endl;
+	
+
+	applyTraining *user = new applyTraining(trainingProperties[iTrain].get<std::string>("name"), 
+						trainingProperties[iTrain].get<std::string>("apply_MVA_to"),
+						weightfilename,
+						trainingProperties[iTrain].get<int>("mode"),
+						inputTree,
+						inputFilename,
+						outputfile);
+	user->getResults();
+	delete user;
+	inputFile->Close();
+	if (iTrain > 0)
+	    gSystem->Exec(("rm " + lastfile).c_str());
     }
+/*
+    else 
+    {
+	inputTree->AddFriend("t", "CovU2.root");
+	cout << "JUMPING INTO THE MODE 1 TREE" << endl;
+	applyTraining *user = new applyTraining(trainingProperties[iTrain].get<std::string>("name"), 
+						trainingProperties[iTrain].get<std::string>("apply_MVA_to"),
+						weightfilename,
+						trainingProperties[iTrain].get<int>("mode"),
+						inputTree,
+						inputFilename);
+	user->getResults();
+	delete user;
+    }
+*/
     std::cout << "Initialized." << std::endl;
   }
 }

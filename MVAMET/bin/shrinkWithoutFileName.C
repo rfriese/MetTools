@@ -28,10 +28,7 @@ int main(int argc, char* argv[] ) {
   TFile *lOFile = new TFile("slimmed.root", "RECREATE");
   TDirectory *cdMAPAnalyzer = lOFile->mkdir("MAPAnalyzer");
   cdMAPAnalyzer->cd();
-  float fileName;
   TTree *lOTree = lTree->CloneTree(0);
-  TBranch *BranchFileName =lOTree->Branch("fileName",&fileName,"fileName/F");
-  fileName = strtof(argv[4], NULL);
   int lNEvents = lTree->GetEntries();
   
   if (strcmp( argv[2], "") == 0)
@@ -41,7 +38,6 @@ int main(int argc, char* argv[] ) {
 	  std::cout << "Event " << i0 << "/" << lNEvents << std::endl;
       lTree->GetEntry(i0);
       lOTree->Fill();
-      //BranchFileName->Fill();
     }
   else
   {
@@ -57,8 +53,9 @@ int main(int argc, char* argv[] ) {
       if(result > 0)
       {
 	lOTree->Fill();
-	//BranchFileName->Fill();
       }
+      else
+	std::cout << "Event filtered!" << std::endl;
     }
   }
   

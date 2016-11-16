@@ -14,7 +14,7 @@ applyTraining::applyTraining(std::string name, std::string apply_MVA_to, std::st
   std::cout << "new constructur" << std::endl;
   _lOTree = _lTree->CloneTree(0);
 }
-applyTraining::applyTraining(std::string name, std::string apply_MVA_to, std::string weightfilename, int mode, TTree *inputTree, std::string input_filename) :
+applyTraining::applyTraining(std::string name, std::string apply_MVA_to, std::string weightfilename, int mode, TTree *inputTree, std::string input_filename, std::string output_filename) :
   _mode(mode),
   _iTrain(weightfilename),
   _applyMVAto(apply_MVA_to),
@@ -25,16 +25,26 @@ applyTraining::applyTraining(std::string name, std::string apply_MVA_to, std::st
   _lVars( (std::vector<std::string>*) _lFForest->Get((_mvaResponseName + "varlist").c_str()) ),
   _lN(_lVars->size()),
   _lFVars(new TTreeFormula*[_lN]),
-  _lVals(new Float_t[_lN]),
+  _lVals(new Float_t[_lN])
   //inputs
+  /*
   _lTree(inputTree),
   _lNEvents(_lTree->GetEntries()),
   //outputs
-  _outputFilename(_mvaResponseName + ".root"),
+  //_outputFilename(_mvaResponseName + ".root"),
+  _outputFilename(output_filename),
   _lOFile(new TFile( _outputFilename.c_str(),"RECREATE")),
   _lOTree(_lTree)
+  */
 {
   std::cout << "new constructur" << std::endl;
+  _lTree = inputTree;
+  _lNEvents = _lTree->GetEntries();
+  //outputs
+  //_outputFilename(_mvaResponseName + ".root"),
+  _outputFilename = output_filename;
+  _lOFile = new TFile( _outputFilename.c_str(),"RECREATE");
+  _lOTree = _lTree;
   _lOTree = _lTree->CloneTree(0);
 }
 /*
@@ -48,7 +58,6 @@ applyTraining::applyTraining(boost::property_tree::ptree &pt, TTree *inputTree) 
   _lForest((_mode>0)  ? (GBRForest*)_lFForest->Get(_mvaResponseName.c_str()) : NULL),
   _lVars((_mode>0) ? (std::vector<std::string>*)_lFForest->Get((_mvaResponseName + "varlist").c_str()): NULL ),
   _lN((_mode>0) ? _lVars->size() : 0),
-  _lFVars(new TTreeFormula*[_lN]),
   _lVals(new Float_t[_lN]),
   //inputs
   _lTree(inputTree),
