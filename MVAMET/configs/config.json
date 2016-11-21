@@ -1,5 +1,5 @@
 { 
-	"activeTrainings" : ["phiTraining", "recoilTraining", "CovU1", "CovU2", "CovApply"],
+	"activeTrainings" : ["phiTraining", "recoilTraining"],
 		"activeReweightings" : ["flattenpT"],
 		"inputFile": "/storage/jbod/nzaeh/2016-10-04/Gridoutput/shrinkedDataTotSelected.root",
 		"Folder" : "MAPAnalyzer/t",
@@ -10,7 +10,7 @@
 			"desc" : "Weight to get flat pT distribution",
 			"name" : "flatPtWeight",
 			"flattenVariable" : "Boson_Pt",
-			"weight" : "select&&nCombinations==1&&Boson_Pt<750*(fileName==1||fileName==3||fileName==4||fileName==5)",
+			"weight" : "select&&nCombinations==1&&Boson_Pt<750&&(fileName==1||fileName==3||fileName==4||fileName==5)",
 			"eventsPerBin" : 500,
 			"type" : 1
 		},
@@ -20,7 +20,7 @@
 			"friends" : [],
 			"desc" : "First training on phi",
 			"apply_MVA_to" : "recoilslimmedMETs",
-			"weight" : "select&&nCombinations==1*(fileName==1||fileName==3||fileName==4||fileName==5)",
+			"weight" : "select&&nCombinations==1&&(fileName==1||fileName==3||fileName==4||fileName==5)",
 			"name" : "PhiCorrectedRecoil",
 			"folder" : "MAPAnalyzer/t",
 			"minEvents" : 250,

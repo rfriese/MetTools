@@ -136,7 +136,7 @@ int main(int argc, char* argv[] )
 
 	cout << "SelectedEvents: " << selectedEvents << endl;
 	
-	int variablesize = entryarray->GetEntries()+entryarrayWeight->GetEntries()+3;
+	int variablesize = entryarray->GetEntries()+entryarrayWeight->GetEntries()+5;
 	
 	cout << "maxEntries: " << maxEntries << endl;
 	cout << "variablesize: " << variablesize << endl;
@@ -212,7 +212,7 @@ int main(int argc, char* argv[] )
 	int boson_Phi = 0;
 	int boson_Pt = 0;
 	int recoilslimmedMETs_Phi = 0;
-	int recoilslimmedMETs_Pt = 0;
+	int recoilslimmedMETs_LongZ = 0;
 	int PhiCorrectedRecoil_LongZ = 0;
 	
 	for (int i = 0; i < entryarray->GetEntries(); i++)
@@ -220,8 +220,8 @@ int main(int argc, char* argv[] )
 	    //search for needed variables for target variable
 	    if (strcmp(entryarray->At(i)->GetName(),"recoilslimmedMETs_Phi") == 0)
 		recoilslimmedMETs_Phi = i;
-	    if (strcmp(entryarray->At(i)->GetName(),"recoilslimmedMETs_Pt") == 0)
-		recoilslimmedMETs_Pt = i;
+	    if (strcmp(entryarray->At(i)->GetName(),"recoilslimmedMETs_LongZ") == 0)
+		recoilslimmedMETs_LongZ = i;
 	    if (strcmp(entryarray->At(i)->GetName(),"Boson_Phi") == 0)
 		boson_Phi = i;
 	    if (strcmp(entryarray->At(i)->GetName(),"Boson_Pt") == 0)
@@ -251,7 +251,7 @@ int main(int argc, char* argv[] )
 	cout << "boson_Phi " << boson_Phi<<endl;
 	cout << "boson_Pt " << boson_Pt<<endl;
 	cout << "recoilslimmedMETs_Phi " << recoilslimmedMETs_Phi<<endl;
-	cout << "recoilslimmedMETs_Pt " << recoilslimmedMETs_Pt<<endl;
+	cout << "recoilslimmedMETs_LongZ " << recoilslimmedMETs_LongZ<<endl;
 	cout << "PhiCorrectedRecoil_LongZ " << PhiCorrectedRecoil_LongZ<<endl;
 	
 	//add target variables
@@ -284,7 +284,7 @@ int main(int argc, char* argv[] )
 	    dataset << ",";
 	    //extra third target Pt variable independent of the BDT prediction
 	    //"-Boson_Pt/SlimmedMetsPt",
-	    dataset << (-datacontainer[i*(variablesize)+boson_Pt]/datacontainer[i*(variablesize)+recoilslimmedMETs_Pt]);
+	    dataset << (-datacontainer[i*(variablesize)+boson_Pt]/datacontainer[i*(variablesize)+recoilslimmedMETs_LongZ]);
 	    
 	    dataset << ",";
 	    dataset << datacontainer[i*(variablesize)+boson_Pt]*cos(  datacontainer[i*(variablesize)+boson_Phi]);

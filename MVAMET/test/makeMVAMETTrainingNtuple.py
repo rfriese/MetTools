@@ -85,7 +85,7 @@ process.MVAMET.saveMap = cms.bool(True)
 process.genZEvent = cms.EDFilter("GenParticleSelector",
     filter = cms.bool(True),
     src = cms.InputTag("prunedGenParticles"),
-    cut = cms.string('abs(pdgId()) == 13 && !isDirectPromptTauDecayProductFinalState()'),
+    cut = cms.string('(abs(pdgId()) == 13 && !isDirectPromptTauDecayProductFinalState()) || (abs(pdgId()) == 11 && !isDirectPromptTauDecayProductFinalState())'),
     #cut = cms.string('isDirectPromptTauDecayProductFinalState()'),
     stableOnly = cms.bool(False)
 )
