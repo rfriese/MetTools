@@ -109,15 +109,14 @@ int main(int argc, char* argv[] )
 	
 	
 	cout << "Counting selected events..." << endl;
-	float selectChecker;
+
 	int selectedEvents = 0;
 	float fileChecker;
-	inputTree1->SetBranchAddress("select",&selectChecker);
 	inputTree1->SetBranchAddress("fileName",&fileChecker);
 	for (int i = 0; i < inputTree1->GetEntries(); i++)
 	{
 	    inputTree1 -> GetEntry(i);
-	    if (selectChecker == 1 && isUsefulFile(fileChecker, fileList))
+	    if (isUsefulFile(fileChecker, fileList))
 		selectedEvents++;
 	    if (i % 1000000 == 0)
 		cout << i <<  "/" << inputTree1->GetEntries() << " Events processed" << endl;
@@ -144,15 +143,12 @@ int main(int argc, char* argv[] )
 	float *datacontainer = new float[maxEntries*(variablesize)];
 	
 	cout << "Loading data into local storage.." << endl;
-	int selectentry = 0;
 	int fileID = 0;
 	//variablesize - 5 as it does not store the additional 5 calculated target variables
 	float varlist[(variablesize-5)];
 	for (int j = 0; j < entryarray->GetEntries(); j++)
 	    {
 		inputTree1->SetBranchAddress(entryarray->At(j)->GetName(),&varlist[j]);
-		if (strcmp(entryarray->At(j)->GetName(),"select") == 0)
-		    selectentry = j;
 		if (strcmp(entryarray->At(j)->GetName(),"fileName") == 0)
                     fileID = j;
 
@@ -174,7 +170,7 @@ int main(int argc, char* argv[] )
 	    inputTree1 -> GetEntry(treecount);
 	    inputTreeWeight -> GetEntry(treecount);
 
-	    if (varlist[selectentry] == 1 && isUsefulFile(varlist[fileID],fileList))
+	    if (isUsefulFile(varlist[fileID],fileList))
 	    {
 		for (int j = 0; j < variablesize-5; j++)
 		{
