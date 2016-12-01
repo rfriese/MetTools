@@ -22,8 +22,16 @@ metstrings.extend([ "dmvamet_Pt", "dmvamet_Phi", "dpfmet_Pt", "dpfmet_Phi", "MVA
                  "Boson_M",
                  "Boson_Eta",
                  "Boson_sumET",
-                 "Boson_daughter1",
-                 "Boson_daughter2",
+                 "Boson_daughter1_PdgId",
+		 "Boson_daughter2_PdgId",
+		 "Boson_daughter1_Pt",
+		 "Boson_daughter2_Pt",
+		 "Boson_daughter1_Phi",
+		 "Boson_daughter2_Phi",
+		 "Boson_daughter1_Eta",
+		 "Boson_daughter2_Eta",
+		 "Boson_daughter1_Charge",
+		 "Boson_daughter2_Charge",
                  "nCombinations"
 ])
 
