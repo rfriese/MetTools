@@ -45,7 +45,12 @@ int main(int argc, char* argv[] ) {
     trainingProperties.push_back( pt.get_child(v.second.data()));
   }
 
-  std::string inputFilename = pt.get<std::string>("inputFile");
+  std::string inputFilename;
+  if (argc==3)
+  	inputFilename = argv[2];
+  else
+  	inputFilename = pt.get<std::string>("inputFile");
+
   std::string weightfilename = pt.get<std::string>("weightfilename");
 
   TFile *inputFile = TFile::Open(inputFilename.c_str());
