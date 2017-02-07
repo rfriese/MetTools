@@ -63,7 +63,7 @@ def submission():
 	config.JobType.pluginName = 'Analysis'
 	config.JobType.psetName = 'makeMVAMETTrainingNtuple.py'
 	#config.JobType.inputFiles = ['Spring16_25nsV6_DATA.db', 'Spring16_25nsV6_MC.db']
-	config.JobType.inputFiles = ['Summer16_23Sep2016V2_MC.db']
+	config.JobType.inputFiles = ['Summer16_23Sep2016V4_MC.db']
 	config.JobType.allowUndistributedCMSSW = True
 	config.Site.blacklist = ["T2_BR_SPRACE"]
 	config.Data.inputDBS = 'global'

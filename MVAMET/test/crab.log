@@ -1,0 +1,24 @@
+DEBUG 2017-02-03 00:12:32,243: 	 Executing command: 'status'
+DEBUG 2017-02-03 00:12:32,244: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-02-03 00:12:32,253: 	 Checking credentials
+DEBUG 2017-02-03 00:12:32,253: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-02-03 00:12:32,253: 	 Getting proxy life time left
+ERROR 2017-02-03 00:12:32,581: 	 Keyboard Interrupted
+DEBUG 2017-02-03 00:12:43,755: 	 Executing command: 'status'
+DEBUG 2017-02-03 00:12:43,756: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-02-03 00:12:43,765: 	 Checking credentials
+DEBUG 2017-02-03 00:12:43,766: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-02-03 00:12:43,766: 	 Getting proxy life time left
+ERROR 2017-02-03 00:12:45,227: 	 Keyboard Interrupted
+DEBUG 2017-02-03 00:12:45,900: 	 Executing command: 'status'
+DEBUG 2017-02-03 00:12:45,900: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-02-03 00:12:45,909: 	 Checking credentials
+DEBUG 2017-02-03 00:12:45,909: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-02-03 00:12:45,909: 	 Getting proxy life time left
+ERROR 2017-02-03 00:12:46,526: 	 Keyboard Interrupted
+DEBUG 2017-02-03 00:12:47,232: 	 Executing command: 'status'
+DEBUG 2017-02-03 00:12:47,232: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-02-03 00:12:47,240: 	 Checking credentials
+DEBUG 2017-02-03 00:12:47,240: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-02-03 00:12:47,240: 	 Getting proxy life time left
+ERROR 2017-02-03 00:12:47,952: 	 Keyboard Interrupted
