@@ -5,9 +5,9 @@ from PhysicsTools.PatAlgos.tools.tauTools import *
 from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
 
 options = VarParsing ('python')
-options.register ('globalTag',"80X_mcRun2_asymptotic_2016_miniAODv2_v1",VarParsing.multiplicity.singleton,VarParsing.varType.string,'input global tag to be used');
+options.register ('globalTag',"80X_mcRun2_asymptotic_2016_TrancheIV_v8",VarParsing.multiplicity.singleton,VarParsing.varType.string,'input global tag to be used');
 options.register ('inputFile', 'file:////storage/jbod/nzaeh/DYJetsToLL_M-50_HT-400to600.root', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a testfile")
-options.register ("localSqlite", 'sqlite:Summer16_23Sep2016V2_MC.db', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a local sqlite file")
+options.register ("localSqlite", '', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a local sqlite file")
 options.register ("reapplyJEC", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply JEC to Jets")
 options.register ("reapplyPUJetID", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply PU Jet ID")
 options.register ("recomputeMET", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Recomute MET instead of taking it from MiniAOD")
