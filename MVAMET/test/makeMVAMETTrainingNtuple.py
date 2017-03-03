@@ -20,19 +20,17 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 jetCollection = "slimmedJets"
 
-"""
+
 if (options.localSqlite == ''):
     process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
     process.GlobalTag.globaltag = options.globalTag
 else:
+    process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
+    process.GlobalTag.globaltag = options.globalTag
     from RecoMET.METPUSubtraction.jet_recorrections import loadLocalSqlite
     loadLocalSqlite(process, options.localSqlite) 
-"""
 
-process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
-process.GlobalTag.globaltag = options.globalTag
-from RecoMET.METPUSubtraction.jet_recorrections import loadLocalSqlite
-loadLocalSqlite(process, options.localSqlite) 
+
 
 
 if options.reapplyPUJetID:

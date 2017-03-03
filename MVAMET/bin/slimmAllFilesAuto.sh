@@ -100,3 +100,5 @@ done
 names=$(find $gridname -name "slimmed.root")
 hadd -f $gridname/shrinkedDataTot.root $names
 
+names=$(find $gridname -name "slimmed.root" | grep mad)
+hadd -f $gridname/shrinkedDataTotMad.root $names

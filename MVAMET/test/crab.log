@@ -22,3 +22,117 @@ DEBUG 2017-02-03 00:12:47,240: 	 Checking credentials
 DEBUG 2017-02-03 00:12:47,240: 	 Found proxy file /tmp/x509up_u12189
 DEBUG 2017-02-03 00:12:47,240: 	 Getting proxy life time left
 ERROR 2017-02-03 00:12:47,952: 	 Keyboard Interrupted
+DEBUG 2017-03-03 11:37:40,028: 	 Executing command: 'submit'
+DEBUG 2017-03-03 11:37:40,064: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-03-03 11:37:40,078: 	 Checking credentials
+DEBUG 2017-03-03 11:37:40,078: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-03-03 11:37:40,078: 	 Getting proxy life time left
+DEBUG 2017-03-03 11:37:40,482: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -timeleft
+ output : 680572
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:40,887: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -actimeleft
+ output : 680572
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:40,888: 	 Proxy valid for 189:02:52 hours
+DEBUG 2017-03-03 11:37:40,889: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2017-03-03 11:37:40,962: 	 Executing command: 'submit'
+DEBUG 2017-03-03 11:37:40,968: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-03-03 11:37:40,978: 	 Checking credentials
+DEBUG 2017-03-03 11:37:40,978: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-03-03 11:37:40,978: 	 Getting proxy life time left
+DEBUG 2017-03-03 11:37:41,382: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -timeleft
+ output : 680571
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:41,786: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -actimeleft
+ output : 680571
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:41,787: 	 Proxy valid for 189:02:51 hours
+DEBUG 2017-03-03 11:37:41,788: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2017-03-03 11:37:41,816: 	 Executing command: 'submit'
+DEBUG 2017-03-03 11:37:41,819: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-03-03 11:37:41,828: 	 Checking credentials
+DEBUG 2017-03-03 11:37:41,829: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-03-03 11:37:41,829: 	 Getting proxy life time left
+DEBUG 2017-03-03 11:37:42,233: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -timeleft
+ output : 680570
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:42,637: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -actimeleft
+ output : 680570
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:42,638: 	 Proxy valid for 189:02:50 hours
+DEBUG 2017-03-03 11:37:42,639: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2017-03-03 11:37:42,645: 	 Executing command: 'submit'
+DEBUG 2017-03-03 11:37:42,649: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-03-03 11:37:42,658: 	 Checking credentials
+DEBUG 2017-03-03 11:37:42,659: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-03-03 11:37:42,659: 	 Getting proxy life time left
+DEBUG 2017-03-03 11:37:43,063: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -timeleft
+ output : 680569
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:43,467: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -actimeleft
+ output : 680569
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:43,468: 	 Proxy valid for 189:02:49 hours
+DEBUG 2017-03-03 11:37:43,469: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2017-03-03 11:37:43,478: 	 Executing command: 'submit'
+DEBUG 2017-03-03 11:37:43,484: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-03-03 11:37:43,494: 	 Checking credentials
+DEBUG 2017-03-03 11:37:43,494: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-03-03 11:37:43,494: 	 Getting proxy life time left
+DEBUG 2017-03-03 11:37:43,898: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -timeleft
+ output : 680569
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:44,303: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -actimeleft
+ output : 680568
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:44,303: 	 Proxy valid for 189:02:49 hours
+DEBUG 2017-03-03 11:37:44,305: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2017-03-03 11:37:44,313: 	 Executing command: 'submit'
+DEBUG 2017-03-03 11:37:44,317: 	 Found CRAB cache file /usr/users/nzaeh/.crab3
+DEBUG 2017-03-03 11:37:44,326: 	 Checking credentials
+DEBUG 2017-03-03 11:37:44,326: 	 Found proxy file /tmp/x509up_u12189
+DEBUG 2017-03-03 11:37:44,326: 	 Getting proxy life time left
+DEBUG 2017-03-03 11:37:44,729: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -timeleft
+ output : 680568
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:45,134: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u12189 -actimeleft
+ output : 680567
+
+ error: 
+ retcode : 0
+DEBUG 2017-03-03 11:37:45,134: 	 Proxy valid for 189:02:48 hours
+DEBUG 2017-03-03 11:37:45,134: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).

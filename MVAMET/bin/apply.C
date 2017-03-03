@@ -51,6 +51,12 @@ int main(int argc, char* argv[] ) {
   else
   	inputFilename = pt.get<std::string>("inputFile");
 
+  std::string outputDir;
+  if (argc==4)
+  	outputDir = argv[3];
+  else
+  	outputDir = pt.get<std::string>("outputdir");
+
   std::string weightfilename = pt.get<std::string>("weightfilename");
 
   TFile *inputFile = TFile::Open(inputFilename.c_str());
@@ -59,8 +65,8 @@ int main(int argc, char* argv[] ) {
 
   std::cout << "input tree: " << inputTree << std::endl;
   std::cout << "This many: " << trainingProperties.size() << std::endl;
-  std::string outputfile = pt.get<std::string>("outputdir") + "data.root";
-  std::string outputdir = pt.get<std::string>("outputdir");  
+  std::string outputfile = outputDir + "data.root";
+  std::string outputdir = outputDir;  
   std::string lastfile;
 
   for(size_t iTrain = 0; iTrain < trainingProperties.size(); ++iTrain)

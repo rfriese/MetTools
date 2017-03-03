@@ -63,7 +63,7 @@ def submission():
 	config.JobType.pluginName = 'Analysis'
 	config.JobType.psetName = 'makeMVAMETTrainingNtuple.py'
 	#config.JobType.inputFiles = ['Spring16_25nsV6_DATA.db', 'Spring16_25nsV6_MC.db']
-	config.JobType.inputFiles = ['Summer16_23Sep2016V4_MC.db']
+	#config.JobType.inputFiles = ['Summer16_23Sep2016V4_MC.db']
 	config.JobType.allowUndistributedCMSSW = True
 	config.Site.blacklist = ["T2_BR_SPRACE"]
 	config.Data.inputDBS = 'global'
@@ -104,10 +104,29 @@ def submission():
         '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
         '/DYJetsToLL_M-50_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
 	]
-	
-	
+
+	datasetsData = [
+	'/SingleMuon/Run2016B-23Sep2016-v3/MINIAOD',
+	'/SingleMuon/Run2016C-23Sep2016-v1/MINIAOD',
+	'/SingleMuon/Run2016D-23Sep2016-v1/MINIAOD',
+	'/SingleMuon/Run2016E-23Sep2016-v1/MINIAOD',
+	'/SingleMuon/Run2016F-23Sep2016-v1/MINIAOD',
+	'/SingleMuon/Run2016G-23Sep2016-v1/MINIAOD',
+	]
+
+	nicksData = [
+	'SingleMuonRun2016Bv3',
+	'SingleMuonRun2016Cv1',
+	'SingleMuonRun2016Dv1',
+	'SingleMuonRun2016Ev1',
+	'SingleMuonRun2016Fv1',
+	'SingleMuonRun2016Gv1',
+
+]
+
+
+
 	#extensiondatasets
-	
 	datasetsExt = [
         '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v2/MINIAODSIM',
         '/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM',
@@ -118,19 +137,22 @@ def submission():
 
 	config.JobType.outputFiles = ['output.root']
 	
-	for data in datasets:
+	for indexData in range(len(datasetsData)):
 	    # loop over datasets and get repsective nicks
 	    #for nickname in nicknames:
-	    config.General.requestName = data[1:50]
-	    #config.JobType.pyCfgParams = ['']
+	    config.General.requestName = nicksData[indexData]
+
+	    #Global Tag for Data
+	    config.JobType.pyCfgParams = ['globalTag=80X_dataRun2_2016SeptRepro_v7']
 	    #config.JobType.pyCfgParams = ['globalTag=80X_dataRun2_Prompt_ICHEP16JEC_v0' if isData(nickname) else 'globalTag=80X_mcRun2_asymptotic_2016_miniAODv2_v1' #,'kappaTag=KAPPA_2_1_0','nickname=%s'%(nickname),'outputfilename=kappa_%s.root'%(nickname),'testsuite=False']
 	    
 	    #config.Data.inputDataset = get_sample_by_nick(nickname)
-	    config.Data.inputDataset = data#'/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1/MINIAODSIM'
+	    config.Data.inputDataset = datasetsData[indexData]#'/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1/MINIAODSIM'
 	    p = Process(target=submit, args=(config,))
 	    p.start()
 	    p.join()
 	    
+	"""
         for data in datasetsExt:
 	    # loop over datasets and get repsective nicks
 	    #for nickname in nicknames:
@@ -143,7 +165,7 @@ def submission():
 	    p = Process(target=submit, args=(config,))
 	    p.start()
 	    p.join()
-	
+	"""
 	
 
 if __name__ == "__main__":

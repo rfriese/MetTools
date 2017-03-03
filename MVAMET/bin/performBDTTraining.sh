@@ -28,7 +28,6 @@ if [ -e "$gridname/$trainingname/data3.root" ];
 then
 	makeCSVFile $gridname/$trainingname/data3.root $gridname/$trainingname/dataMVAMet$trainingname.csv 8
 fi
-
 if [ -e "../../../../PlotsNico/MVAMetPlots/bin/makePlotsMVAMet.py" ]; then
 	cd ../../../../PlotsNico/MVAMetPlots/bin
 	python makePlotsMVAMet.py -i $gridname/$trainingname/dataMVAMet$trainingname.csv -o $trainingname
