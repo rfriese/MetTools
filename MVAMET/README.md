@@ -26,10 +26,12 @@ The four trainings are performed one after the other, while directly being evalu
 
 The training result is stored in the file specified in the "weightfile" section in the json config.
 
-A typical training takes O(1h) with multicore being used and several hours in single-core mode.
+A typical training takes O(4h) with multicore being used and several hours in single-core mode.
 
-Run the training with
+Read the training script performBDTTraining.sh and adjust the config file accordingly
+
+Run the training script with
 
 ```bash
-regress3 configs/config.json
+bash bin/performBDTTraining.sh
 ```
