@@ -167,6 +167,7 @@ void applyTraining::registerUpdatedFourVector()
     _lOTree->Branch((_mvaResponseName+"_LongZ").c_str(),   &_new_LongZ,  (_mvaResponseName+"_LongZ/F").c_str());
     _lOTree->Branch((_mvaResponseName+"_PerpZ").c_str(),  &_new_PerpZ, (_mvaResponseName+"_PerpZ/F").c_str());
     _lOTree->Branch((_mvaResponseName+"_Phi").c_str(),   &_new_UPhi,  (_mvaResponseName+"_Phi/F").c_str());
+    _lOTree->Branch((_mvaResponseName+"_Response").c_str(),   &_new_Response,  (_mvaResponseName+"_Reponse/F").c_str());
 }
 
 void applyTraining::registerUpdatedCovMatrix()
@@ -190,6 +191,7 @@ void applyTraining::calculateUpdatedFourVector()
     else if(_mode==2)// U Corrections
     {
       _newU.SetPtEtaPhiM(fabs(_mvaResponse * _old_U), 0, _old_UPhi,0);
+      //_newU.SetPtEtaPhiM(fabs(_mvaResponse*100.0 + _old_U), 0, _old_UPhi,0);
       if(_mvaResponse < 0)
         _newU.RotateZ(TMath::Pi());
     }
@@ -201,6 +203,7 @@ void applyTraining::calculateUpdatedFourVector()
     parU.RotateZ(-_z.Phi());
     _new_LongZ = float(parU.Px());
     _new_PerpZ = float(parU.Py());
+    _new_Response = _mvaResponse;
 }
 
 void applyTraining::registerUpdatedMET()

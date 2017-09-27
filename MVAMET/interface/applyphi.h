@@ -56,6 +56,7 @@ class applyTraining {
   float _new_LongZ;
   float _new_PerpZ;
   float _new_UPhi;
+  float _new_Response;
 
   TLorentzVector _MET;
   float _new_met;

@@ -10,7 +10,12 @@
 using namespace std;
 
 
+/*
+ * FILTER FOR NLO SAMPLES does currently NOT work as the file indices are not created by 'shrink.C' -- can be implemented by creating a branch 'fileName' in shrink.C which carries the indice of each     sample (not sure why I deleted it before)
 
+	Shrinks input root files according to the given cut string
+
+*/
 
 int main(int argc, char* argv[] ) {
 
@@ -28,10 +33,7 @@ int main(int argc, char* argv[] ) {
   TFile *lOFile = new TFile("slimmed.root", "RECREATE");
   TDirectory *cdMAPAnalyzer = lOFile->mkdir("MAPAnalyzer");
   cdMAPAnalyzer->cd();
-  float fileName;
   TTree *lOTree = lTree->CloneTree(0);
-  TBranch *BranchFileName =lOTree->Branch("fileName",&fileName,"fileName/F");
-  fileName = strtof(argv[4], NULL);
   int lNEvents = lTree->GetEntries();
   
   if (strcmp( argv[2], "") == 0)

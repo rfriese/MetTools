@@ -1,3 +1,4 @@
+#This script will merge all root files, shrink them by excluding all unnecessary variables not used by mvamet and save it as slimmed.root in $gridname
 #specify directory name in which the skimmed data lies
 gridname=/storage/jbod/nzaeh/2017-02-02/Gridoutput/
 

@@ -65,8 +65,8 @@ int main(int argc, char* argv[] ) {
 
   std::cout << "input tree: " << inputTree << std::endl;
   std::cout << "This many: " << trainingProperties.size() << std::endl;
-  std::string outputfile = outputDir + "data.root";
-  std::string outputdir = outputDir;  
+  std::string outputfile = outputDir + "/data.root";
+  std::string outputdir = outputDir + "/";  
   std::string lastfile;
 
   for(size_t iTrain = 0; iTrain < trainingProperties.size(); ++iTrain)
