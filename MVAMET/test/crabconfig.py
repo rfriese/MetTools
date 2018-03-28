@@ -65,11 +65,12 @@ def submission():
 	#config.JobType.inputFiles = ['Spring16_25nsV6_DATA.db', 'Spring16_25nsV6_MC.db']
 	#config.JobType.inputFiles = ['Summer16_23Sep2016V4_MC.db']
 	config.JobType.allowUndistributedCMSSW = True
+	config.JobType.maxMemoryMB = 3500
 	config.Site.blacklist = ["T2_BR_SPRACE"]
 	config.Data.inputDBS = 'global'
 	config.Data.splitting = 'FileBased'
-	config.Data.unitsPerJob = 1
-	config.Data.outLFNDirBase = '/store/user/%s/higgs-kit/skimming/80X_%s'%(getUsernameFromSiteDB(), date)
+	config.Data.unitsPerJob = 10
+	config.Data.outLFNDirBase = '/store/user/%s/metskim/92X_%s'%(getUsernameFromSiteDB(), date)
 	#config.Data.outLFNDirBase = '/store/user/%s/higgs-kit/skimming/80X_%s'%(getUsernameFromSiteDB(), date)
 	config.Data.publication = False
 	
@@ -94,17 +95,10 @@ def submission():
 	
 	"""
 	datasets = [
-        '/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv2-PUMoriond17_HCALDebug_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-1200to2500_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-2500toInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-70to100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-800to1200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM',
-        '/DYJetsToLL_M-50_HT-600to800_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/MINIAODSIM'
+		'/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer17MiniAOD-92X_upgrade2017_realistic_v10_ext1-v2/MINIAODSIM'
 	]
 
+	"""
 	datasetsData = [
 	'/SingleMuon/Run2016B-23Sep2016-v3/MINIAOD',
 	'/SingleMuon/Run2016C-23Sep2016-v1/MINIAOD',
@@ -133,21 +127,22 @@ def submission():
         '/DYJetsToLL_M-50_HT-200to400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM',
         '/DYJetsToLL_M-50_HT-400to600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 	] 
-	
+	"""
+	nicks = ["DYext1v2"]	
 
 	config.JobType.outputFiles = ['output.root']
 	
-	for indexData in range(len(datasetsData)):
+	for indexData in range(len(datasets)):
 	    # loop over datasets and get repsective nicks
 	    #for nickname in nicknames:
-	    config.General.requestName = nicksData[indexData]
+	    config.General.requestName = nicks[indexData]
 
 	    #Global Tag for Data
-	    config.JobType.pyCfgParams = ['globalTag=80X_dataRun2_2016SeptRepro_v7']
+	    config.JobType.pyCfgParams = ['globalTag=92X_upgrade2017_realistic_v14']
 	    #config.JobType.pyCfgParams = ['globalTag=80X_dataRun2_Prompt_ICHEP16JEC_v0' if isData(nickname) else 'globalTag=80X_mcRun2_asymptotic_2016_miniAODv2_v1' #,'kappaTag=KAPPA_2_1_0','nickname=%s'%(nickname),'outputfilename=kappa_%s.root'%(nickname),'testsuite=False']
 	    
 	    #config.Data.inputDataset = get_sample_by_nick(nickname)
-	    config.Data.inputDataset = datasetsData[indexData]#'/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1/MINIAODSIM'
+	    config.Data.inputDataset = datasets[indexData]#'/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISpring16MiniAODv2-PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext1-v1/MINIAODSIM'
 	    p = Process(target=submit, args=(config,))
 	    p.start()
 	    p.join()

@@ -5,8 +5,8 @@ from PhysicsTools.PatAlgos.tools.tauTools import *
 from RecoMET.METPUSubtraction.MVAMETConfiguration_cff import runMVAMET
 
 options = VarParsing ('python')
-options.register ('globalTag',"80X_mcRun2_asymptotic_2016_TrancheIV_v8",VarParsing.multiplicity.singleton,VarParsing.varType.string,'input global tag to be used');
-options.register ('inputFile', 'file:////storage/jbod/nzaeh/DYJetsToLL_M-50_HT-400to600.root', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a testfile")
+options.register ('inputFile', 'root://cms-xrd-global.cern.ch//store/mc/RunIISummer17MiniAOD/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/92X_upgrade2017_realistic_v10_ext1-v2/10000/0A8639B4-1D94-E711-9C68-02163E0135C6.root', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a testfile")
+options.register ('globalTag',"92X_upgrade2017_realistic_v14",VarParsing.multiplicity.singleton,VarParsing.varType.string,'input global tag to be used');
 options.register ("localSqlite", '', VarParsing.multiplicity.singleton, VarParsing.varType.string, "Path to a local sqlite file")
 options.register ("reapplyJEC", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply JEC to Jets")
 options.register ("reapplyPUJetID", True, VarParsing.multiplicity.singleton, VarParsing.varType.bool, "Reapply PU Jet ID")
@@ -19,7 +19,6 @@ process = cms.Process("MVAMET")
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 jetCollection = "slimmedJets"
-
 
 if (options.localSqlite == ''):
     process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff")
@@ -96,6 +95,49 @@ process.genZEvent = cms.EDFilter("GenParticleSelector",
     stableOnly = cms.bool(False)
 )
 
+process.goodEventFilter = cms.EDFilter("CandViewCountFilter",
+										src = cms.InputTag("slimmedMuonsTight"),
+										minNumber = cms.uint32(2),
+										maxNumber = cms.uint32(2),
+                                        filter = cms.bool(True) )
 
-process.skimmvamet = cms.Sequence( process.genZEvent * process.MVAMET * process.MAPAnalyzer)
-process.p *= (process.skimmvamet)
+process.MVAMETtask = cms.Task(
+    process.egmGsfElectronIDTask,
+    process.slimmedMuonsTight,
+    process.slimmedElectronsTight,
+    process.slimmedTausLoose,
+    process.slimmedTausLooseCleaned,
+    process.tausSignificance,
+    process.tauMET,
+    process.tauPFMET,
+    process.allDecayProducts,
+    process.tauDecayProducts,
+    process.patpfTrackMET,
+    process.pfTrackMET,
+    process.pfTrackMETCands,
+    process.pfChargedPV,
+    process.patpfNoPUMET,
+    process.pfNoPUMET,
+    process.pfNoPUMETCands,
+    process.neutralInJets,
+    process.patJetsReapplyJEC,
+    process.patJetCorrFactorsReapplyJEC,
+    process.pileupJetIdUpdated,
+    process.pfNeutrals,
+    process.patpfPUCorrectedMET,
+    process.pfPUCorrectedMET,
+    process.pfPUCorrectedMETCands,
+    process.patpfPUMET,
+    process.pfPUMET,
+    process.pfPUMETCands,
+    process.pfChargedPU
+)
+
+process.seq = cms.Sequence(
+    process.genZEvent *
+    process.goodEventFilter*
+    process.MVAMET*
+	process.MAPAnalyzer,
+    process.MVAMETtask)
+process.p = cms.Path (process.seq)
+
