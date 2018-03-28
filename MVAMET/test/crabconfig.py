@@ -26,8 +26,7 @@ def submit(config):
 		print "Failed submitting task: %s" % (cle)
 
 def crab_command(command):
-	for dir in glob('/nfs/dust/cms/user/%s/kappa/crab_kappa_skim-%s/*'%(getUsernameFromSiteDB(), date)):
-	#for dir in glob('/net/scratch_cms/institut_3b/%s/kappa/crab_kappa_skim-%s/*'%(getUsernameFromSiteDB(), date)):
+	for dir in glob('/storage/b/friese/mvamet/skim/crab-%s/*'%(date)):
 		try:
 			crabCommand(command, dir = dir)
 		except HTTPException as hte:
@@ -52,7 +51,7 @@ def check_path(path):
 def submission():
 	from CRABClient.UserUtilities import config
 	config = config()
-	config.General.workArea = '/storage/jbod/nzaeh/%s'%(date)
+	config.General.workArea = '/storage/b/friese/mvamet/skim/workdir-crab-%s/'%(date)
 	#config.General.workArea = '/nfs/dust/cms/user/%s/kappa/crab_kappa_skim80X-%s'%(getUsernameFromSiteDB(), date)
 	#config.General.workArea = '/net/scratch_cms/institut_3b/%s/kappa/crab_kappa_skim-%s'%(getUsernameFromSiteDB(), date)
 	check_path(config.General.workArea)
